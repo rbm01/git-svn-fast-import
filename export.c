@@ -341,7 +341,7 @@ node_modify(svn_stream_t *dst, const node_t *node, apr_pool_t *pool)
     const char *checksum;
     checksum = svn_checksum_to_cstring_display(node->checksum, pool);
 
-    if (node->kind == svn_node_dir && node->cached == FALSE) {
+    if (node->kind == svn_node_dir) {
         for (int i = 0; i < node->entries->nelts; i++) {
             const node_t *subnode = &APR_ARRAY_IDX(node->entries, i, node_t);
             SVN_ERR(node_modify(dst, subnode, pool));

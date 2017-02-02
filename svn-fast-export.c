@@ -143,7 +143,7 @@ do_main(int *exit_code, int argc, const char **argv, apr_pool_t *pool)
     svn_repos_t *repo;
 
     // Trunk path prefix;
-    const char *trunk_path = "";
+    const char *trunk_path = "trunk";
     // Path to a file containing mapping of
     // Subversion committers to Git authors.
     const char *authors_path = NULL;

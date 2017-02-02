@@ -22,7 +22,7 @@
 CC ?= cc
 INSTALL = install
 RM = rm -f
-PREFIX ?= $(HOME)
+PREFIX ?= /usr/local
 CFLAGS = -g -O2 -Wall -std=c99
 CPPFLAGS ?=
 LDFLAGS ?=
@@ -33,7 +33,7 @@ include uname.mak
 
 APR_INCLUDES := $(shell apr-1-config --includes)
 APR_CPPFLAGS := $(shell apr-1-config --cppflags)
-CPPFLAGS +=$(APR_INCLUDES) $(APR_CPPFLAGS)
+CPPFLAGS +=$(APR_INCLUDES) $(APR_CPPFLAGS) -I/usr/include/subversion-1
 
 GIT_SVN_FAST_IMPORT := git-svn-fast-import
 GIT_SVN_VERIFY_IMPORT := git-svn-verify-import
