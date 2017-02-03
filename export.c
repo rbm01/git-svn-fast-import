@@ -338,15 +338,18 @@ reset_branch(svn_stream_t *dst,
 static svn_error_t *
 node_modify(svn_stream_t *dst, const node_t *node, apr_pool_t *pool)
 {
-    const char *checksum;
-    checksum = svn_checksum_to_cstring_display(node->checksum, pool);
-
     if (node->kind == svn_node_dir) {
+        if (node->entries == NULL) {
+            return SVN_NO_ERROR;
+        }
+
         for (int i = 0; i < node->entries->nelts; i++) {
             const node_t *subnode = &APR_ARRAY_IDX(node->entries, i, node_t);
             SVN_ERR(node_modify(dst, subnode, pool));
         }
     } else {
+        const char *checksum;
+        checksum = svn_checksum_to_cstring_display(node->checksum, pool);
         SVN_ERR(svn_stream_printf(dst, pool, "M %o %s \"%s\"\n",
                                   node->mode, checksum, node->path));
     }

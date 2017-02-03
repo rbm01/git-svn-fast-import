@@ -93,9 +93,11 @@ trap 'on_exit' EXIT
 
 mkfifo $CHAN
 
+echo "git fast-import $GIT_FAST_IMPORT_ARGS --done <$CHAN &"
 git fast-import $GIT_FAST_IMPORT_ARGS --done <$CHAN &
 FAST_IMPORT_PID=$!
 
+echo "svn-fast-export $SVN_FAST_EXPORT_ARGS > $CHAN"
 eval "svn-fast-export $SVN_FAST_EXPORT_ARGS" >$CHAN
 RET_CODE=$?
 
