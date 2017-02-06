@@ -143,7 +143,7 @@ do_main(int *exit_code, int argc, const char **argv, apr_pool_t *pool)
     svn_repos_t *repo;
 
     // Trunk path prefix;
-    const char *trunk_path = "trunk";
+    const char *trunk_path = NULL;
     // Path to a file containing mapping of
     // Subversion committers to Git authors.
     const char *authors_path = NULL;
@@ -278,7 +278,9 @@ do_main(int *exit_code, int argc, const char **argv, apr_pool_t *pool)
         SVN_ERR(author_storage_load_path(ctx->authors, authors_path, pool));
     }
 
-    branch_storage_add_branch(ctx->branches, "refs/heads/master", trunk_path, pool);
+    if (trunk_path != NULL) {
+        branch_storage_add_branch(ctx->branches, "refs/heads/master", trunk_path, pool);
+    }
 
     if (incremental == TRUE && import_branches_path != NULL && import_marks_path != NULL) {
         SVN_ERR(branch_storage_load_path(ctx->branches, import_branches_path, pool));

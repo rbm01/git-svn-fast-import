@@ -102,11 +102,12 @@ branch_storage_lookup_path(branch_storage_t *bs, const char *path, apr_pool_t *p
     const char *branch_path, *prefix, *refname, *root, *subpath;
 
     branch = (branch_t *) tree_match(bs->tree, path, pool);
-    if (branch != NULL) {
+    prefix = tree_match(bs->pfx, path, pool);
+    if (branch != NULL &&
+        (prefix == NULL || strlen(prefix) <= strlen(branch->path))) {
         return branch;
     }
 
-    prefix = tree_match(bs->pfx, path, pool);
     if (prefix == NULL) {
         return NULL;
     }
