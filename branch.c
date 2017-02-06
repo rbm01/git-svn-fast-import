@@ -26,6 +26,7 @@
 #include <svn_dirent_uri.h>
 #include <svn_hash.h>
 #include <svn_string.h>
+#include <svn_path.h>
 
 svn_boolean_t
 branch_path_is_root(const branch_t *b, const char *path)
@@ -103,9 +104,15 @@ branch_storage_lookup_path(branch_storage_t *bs, const char *path, apr_pool_t *p
 
     branch = (branch_t *) tree_match(bs->tree, path, pool);
     prefix = tree_match(bs->pfx, path, pool);
-    if (branch != NULL &&
-        (prefix == NULL || strlen(prefix) <= strlen(branch->path))) {
-        return branch;
+    if (branch != NULL){
+        if (prefix == NULL) {
+            return branch;
+        }
+        apr_array_header_t *pcomps = svn_path_decompose((char *)prefix, pool);
+        apr_array_header_t *bcomps = svn_path_decompose(branch->path, pool);
+        if (pcomps->nelts < bcomps->nelts) {
+            return branch;
+        }
     }
 
     if (prefix == NULL) {
