@@ -40,3 +40,12 @@ ifeq ($(uname_S),Linux)
 		CPPFLAGS +=-I/usr/include/subversion-1
 	endif
 endif
+
+ifeq ($(uname_S),OpenBSD)
+	ifeq ($(shell test -d /usr/local/lib && echo y),y)
+		LDFLAGS +=-L/usr/local/lib
+	endif
+	ifeq ($(shell test -d /usr/local/include/subversion-1 && echo y),y)
+		CPPFLAGS +=-I/usr/local/include/subversion-1
+	endif
+endif

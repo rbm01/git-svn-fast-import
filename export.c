@@ -389,7 +389,11 @@ write_commit(svn_stream_t *dst,
 
         SVN_ERR(svn_stream_printf(dst, pool, "commit %s\n", branch->refname));
         SVN_ERR(svn_stream_printf(dst, pool, "mark :%d\n", commit->mark));
+#ifdef __x86_64__
+        SVN_ERR(svn_stream_printf(dst, pool, "committer %s %lld %+.2d%.2d\n",
+#else
         SVN_ERR(svn_stream_printf(dst, pool, "committer %s %ld %+.2d%.2d\n",
+#endif
                                   author_to_cstring(rev->author, pool),
                                   apr_time_sec(rev->timestamp),
                                   time_exp.tm_gmtoff / 3600,

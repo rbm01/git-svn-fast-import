@@ -274,12 +274,20 @@ set_content_checksum(svn_checksum_t **checksum,
         size -= skip;
     }
 
+#ifdef __x86_64__
+    hdr = apr_psprintf(scratch_pool, "blob %lld", size);
+#else
     hdr = apr_psprintf(scratch_pool, "blob %ld", size);
+#endif
     ctx = svn_checksum_ctx_create(svn_checksum_sha1, scratch_pool);
     SVN_ERR(svn_checksum_update(ctx, hdr, strlen(hdr) + 1));
 
     SVN_ERR(svn_stream_printf(output, scratch_pool, "blob\n"));
+#ifdef __x86_64__
+    SVN_ERR(svn_stream_printf(output, scratch_pool, "data %lld\n", size));
+#else
     SVN_ERR(svn_stream_printf(output, scratch_pool, "data %ld\n", size));
+#endif
 
     output = checksum_stream_create(output, NULL, ctx, scratch_pool);
 
